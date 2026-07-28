@@ -4,23 +4,98 @@ TODO: Implement these tests once remove_duplicates, handle_missing_values,
 and standardise_dates are implemented in src/data_processing/cleaning.py.
 """
 
+import pytest
+import pandas as pd
+import pandas.testing as pdt
 from data_processing.cleaning import (
     remove_duplicates,
     handle_missing_values,
-    standardise_dates,
+    standardise_dates
 )
 
+@pytest.fixture
+def sample_with_duplicates():
+    return pd.DataFrame({
+        'id': [1, 2, 2, 3],
+        'name': ['Alice', 'Bob', 'Bob', 'Charlie']
+    })
 
-def test_remove_duplicates():
-    """Test remove_duplicates()."""
-    pass
+@pytest.fixture
+def sample_with_missing():
+    return pd.DataFrame({
+        'id': [1, 2, 3],
+        'name': ['Alice', None, 'Charlie'],
+        'value': [10, None, 30]
+    })
 
+def test_remove_duplicates_reduces_rows(sample_with_duplicates):
+    result = remove_duplicates(sample_with_duplicates, subset=['id'])
+    assert len(result) == 3
 
-def test_handle_missing_values():
-    """Test handle_missing_values()."""
-    pass
+def test_remove_duplicates_ids_are_unique(sample_with_duplicates):
+    result = remove_duplicates(sample_with_duplicates, subset=['id'])
+    assert result['id'].is_unique
 
+def test_handle_missing_drop(sample_with_missing):
+    result = handle_missing_values(sample_with_missing, strategy='drop')
+    assert result.isnull().sum().sum() == 0
+
+def test_handle_missing_fill(sample_with_missing):
+    result = handle_missing_values(sample_with_missing, strategy='fill', fill_value=0)
+    assert len(result) == 3
 
 def test_standardise_dates():
-    """Test standardise_dates()."""
-    pass
+    df = pd.DataFrame({'date': ['2024-01-01', '2024-06-15']})
+    result = standardise_dates(df, date_columns=['date'])
+    assert pd.api.types.is_datetime64_any_dtype(result['date'])
+
+# import pytest
+# import pandas as pd
+# import pandas.testing as pdt
+# from data_processing.cleaning import (
+#     remove_duplicates,
+#     handle_missing_values,
+#     standardise_dates
+# )
+
+# @pytest.fixture
+# def sample_with_duplicates():
+#     return pd.DataFrame({
+#         'id': [1, 2, 2, 3],
+#         'name': ['Alice', 'Bob', 'Bob', 'Charlie']
+#     })
+
+# @pytest.fixture
+# def sample_with_missing():
+#     return pd.DataFrame({
+#         'id': [1, 2, 3],
+#         'name': ['Alice', None, 'Charlie'],
+#         'value': [10, None, 30]
+#     })
+
+# def test_remove_duplicates_reduces_rows(sample_with_duplicates):
+#     result = remove_duplicates(sample_with_duplicates, subset=['id'])
+#     assert len(result) == 3
+
+# def test_remove_duplicates_ids_are_unique(sample_with_duplicates):
+#     result = remove_duplicates(sample_with_duplicates, subset=['id'])
+#     assert result['id'].is_unique
+
+# def test_handle_missing_drop(sample_with_missing):
+#     result = handle_missing_values(sample_with_missing, strategy='drop')
+#     assert not result.isnull().values.any()
+
+# def test_handle_missing_fill(sample_with_missing):
+#     result = handle_missing_values(
+#         sample_with_missing,
+#         strategy='fill',
+#         fill_value=0
+#     )
+#     assert len(result) == 3
+#     assert not result.isnull().values.any()
+
+# def test_standardise_dates():
+#     df = pd.DataFrame({'date': ['2024-01-01', '2024-06-15']})
+#     result = standardise_dates(df, date_columns=['date'])
+
+#     assert pd.api.types.is_datetime64_any_dtype(result['date'])
