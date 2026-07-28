@@ -2,6 +2,7 @@
 Data validation functions.
 """
 
+
 def validate_isbn(isbn):
     if isbn is None:
         return None
@@ -32,6 +33,7 @@ def validate_isbn(isbn):
         return None
 
     return cleaned
+
 
 # Example function to implement:
 # def validate_isbn(isbn):

@@ -12,6 +12,7 @@ from pathlib import Path
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+
 def load_csv(filepath, **kwargs):
     """Load CSV file into DataFrame.
 
@@ -50,6 +51,7 @@ def load_csv(filepath, **kwargs):
         logger.error(f"Error loading CSV {filepath}: {e}")
         raise
 
+
 def load_json(filepath):
     """Load JSON file and flatten nested structure into a DataFrame.
 
@@ -74,7 +76,7 @@ def load_json(filepath):
 
     try:
         logger.info(f"Loading JSON from {filepath}")
-        with open(filepath, 'r') as f:
+        with open(filepath, "r") as f:
             data = json.load(f)
 
         df = pd.json_normalize(data)
@@ -88,6 +90,7 @@ def load_json(filepath):
     except Exception as e:
         logger.error(f"Error loading JSON {filepath}: {e}")
         raise
+
 
 def load_excel(filepath, sheet_name=0, **kwargs):
     """Load Excel file into DataFrame.
