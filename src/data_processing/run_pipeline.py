@@ -112,7 +112,7 @@ def process_circulation_data(warnings):
     input_missing = df_clean.isnull().sum().sum()
     df_clean = handle_missing_values(df_clean, strategy='drop')
     output_missing = df_clean.isnull().sum().sum()
-    print(f"  - Dropped rows with missing values")
+    print("  - Dropped rows with missing values")
     if input_missing > 0 and output_missing == input_missing:
         warnings.append(f"Circulation: handle_missing_values() left {input_missing:,} missing values unchanged - is it implemented?")
 
