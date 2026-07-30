@@ -18,6 +18,8 @@ theme:
       logo: material/database
     static_templates:
       - 404.html
+    palette:
+      primary: red
 
 # Extensions
 markdown_extensions:
