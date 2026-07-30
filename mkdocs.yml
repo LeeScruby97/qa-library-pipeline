@@ -1,9 +1,9 @@
 # Site name
-site_name: SITE NAME
+site_name: QA-Library-Pipeline
 
 # Navigation menu
 nav:
-  - Overview: index.md
+  - Overview: architecture/index.md
   - Architecture:
     - Pipeline Design: architecture/design-pipeline.md
     - ADR: architecture/adr.md
